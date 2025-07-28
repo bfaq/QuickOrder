@@ -22,7 +22,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from .models import Usuario, Restaurantes, TipoComida, Departamento, Municipio, Productos, ProductosSubproductos
+    from .models import Usuario, Restaurantes, TipoComida, Departamento, Municipio, Productos, ProductosSubproductos, Orden
     from .routes import main 
 
     class MunicipioAdmin(ModelView):
@@ -100,6 +100,20 @@ def create_app():
                 'get_label': 'nombre'
             }
         }
+    
+    class OrdenAdmin(ModelView):
+        form_columns = ['id_orden','precio_total', 'descripcion','estado', 'id_usuario', 'creation_date']
+        
+        form_overrides = {
+            'id_usuario': QuerySelectField
+        }
+        # Configuramos el comportamiento del SelectField
+        form_args = {
+            'id_usuario': {
+                'query_factory': lambda: Usuario.query.all(),
+                'get_label': 'id'
+            }
+        }
 
     # Flask-Admin
     admin = Admin(app, name='Panel Admin', template_mode='bootstrap3', index_view=MyAdminIndexView())
@@ -111,7 +125,7 @@ def create_app():
     #admin.add_view(ModelView(Productos, db.session))
     admin.add_view(ProductoAdmin(Productos, db.session))
     admin.add_view(ModelView(ProductosSubproductos, db.session))
-
+    admin.add_view(OrdenAdmin(Orden, db.session))
     admin.add_link(MenuLink(name='Cerrar sesion', category='', url='/admin/logout'))
     app.register_blueprint(main) 
     

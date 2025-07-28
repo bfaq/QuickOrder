@@ -75,14 +75,42 @@ def signin():
         if user:
             session['admin_logged_in'] = True
             session['user_id'] = str(user.id)
-            return redirect('/location')
+            return redirect('/accion')
         else:
             error = 'Usuario o contraseña incorrectos'
             
     return render_template('signin.html', error=error)
 
 
+@main.route('/accion')
+def accion():
+   return render_template('accion.html')
 
+
+# path accion = Constulta el estado de tu pedido
+@main.route('/order_status', methods=['GET', 'POST'])
+def order_status():
+    error= None
+    #dishes = request.args.getlist('dishes')
+    date = request.args.get('creation_date')
+    order_id = session.get('order_id') 
+    user_id = session.get('user_id')
+    order_details = []
+    try:
+        order_details = Orden.query.filter((Orden.id_orden == order_id) & (Orden.creation_date == date) & (Orden.id_usuario == user_id)).all()
+
+        # if date:
+        #     query = query.filter(Orden.creation_date == date)
+
+        # orders = query.all()
+        print("order_details: ", order_details)
+    except Exception as e:
+            error = "Error al obtener información de orden: " + str(e)
+    return render_template('order_status.html', error=error, order_details=order_details)    
+
+
+
+# path accion = Realiza tu pedido
 @main.route('/location')
 def location():
     error = None
@@ -152,7 +180,7 @@ def dishes():
     return render_template('dishes.html', error=error, platos=platos)
 
 
-@main.route('/order')
+@main.route('/order', methods=["GET","POST"])
 def order():
     error= None
     dishes = request.args.getlist('dishes')
