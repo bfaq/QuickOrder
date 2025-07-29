@@ -21,8 +21,46 @@
                     <h3 class="mainFontColor">!Enhorabuena, hemos tomado tu orden!</h3>
                 </div>
             </div>
-            
+
         </div>
+        <div class="container">
+
+            {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+            <form method="GET">
+                <div class="row">                  
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">Pedido</h5>
+                                <ul>
+                                    <li>
+                                        Precio Total: {{orden.precio_total}}
+                                    </li>
+                                    <li>
+                                        Pedido: {{orden.descripcion}}
+                                    </li>
+                                    <li
+                                        style="color: {{ 'orange' if orden.estado == 1 else 'blue' if orden.estado == 2 else 'green' }}">
+                                        Estado: {{ "Cocina" if orden.estado == 1 else "En camino" if orden.estado == 2
+                                        else "Entregado" }}
+                                    </li>
+                                    <li>
+                                        Fecha de pedido: {{ orden.creation_date.strftime('%d/%m/%Y %H:%M:%S') }}
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+    </div>
     </div>
 
 </body>

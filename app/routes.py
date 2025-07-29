@@ -91,18 +91,16 @@ def accion():
 @main.route('/order_status', methods=['GET', 'POST'])
 def order_status():
     error= None
-    #dishes = request.args.getlist('dishes')
-    date = request.args.get('creation_date')
-    order_id = session.get('order_id') 
     user_id = session.get('user_id')
     order_details = []
     try:
-        order_details = Orden.query.filter((Orden.id_orden == order_id) & (Orden.creation_date == date) & (Orden.id_usuario == user_id)).all()
+        order_details = (
+    Orden.query
+    .filter(Orden.id_usuario == user_id)
+    .order_by(Orden.estado.asc(), Orden.creation_date.asc())
+    .all()
+)
 
-        # if date:
-        #     query = query.filter(Orden.creation_date == date)
-
-        # orders = query.all()
         print("order_details: ", order_details)
     except Exception as e:
             error = "Error al obtener información de orden: " + str(e)
@@ -208,7 +206,7 @@ def order():
     except Exception as e:
         error = "Error al obtener restaurantes: " + str(e)
         print(error)
-    return render_template('order.html', error=error, platos=platos)
+    return render_template('order.html', error=error, orden=orden)
 
 
 

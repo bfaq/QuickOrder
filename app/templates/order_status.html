@@ -31,13 +31,33 @@
         {% endif %}
         <form method="GET">
           {% if order_details %}
-          <div class="card" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
+          <div class="row justify-content-center">
+
+
+            {% for item in order_details %}
+            <div class="col-auto">
+              <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Pedido</h5>
+                  <ul>
+                    <li>
+                      Precio Total: {{item.precio_total}}
+                    </li>
+                    <li>
+                      Pedido: {{item.descripcion}}
+                    </li>
+                    <li style="color: {{ 'orange' if item.estado == 1 else 'blue' if item.estado == 2 else 'green' }}">
+                      Estado: {{ "Cocina" if item.estado == 1 else "En camino" if item.estado == 2 else "Entregado" }}
+                    </li>
+                    <li>
+                      Fecha de pedido: {{ item.creation_date.strftime('%d/%m/%Y %H:%M:%S') }}
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
             </div>
+            {% endfor %}
           </div>
           {% endif %}
         </form>
