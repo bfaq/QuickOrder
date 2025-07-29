@@ -157,7 +157,6 @@ def order():
     error= None
     dishes = request.args.getlist('dishes')
     user_id = session.get('user_id')
-    print(user_id)
     platos = []
     try:
         platos = Productos.query.filter(Productos.id_producto.in_(dishes)).all()
