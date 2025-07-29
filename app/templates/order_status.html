@@ -31,37 +31,14 @@
         {% endif %}
         <form method="GET">
           {% if order_details %}
-          <div class="row row-cols-1 row-cols-md-2 g-4">
-            {% for r in order_details %}
-            <div class="col">
-              <div class="card shadow-lg border-0 rounded-3 h-100">
-                <img src="{{ url_for('static', filename='uploads/' ~ r.imagen) }}" class="card-img-top"
-                  style="object-fit: cover; height: 200px;">
-
-                <div class="card-body">
-                  <h4 class="card-title text-primary">{{ r.nombre }}</h4>
-                  <ul class="list-unstyled text-muted">
-                    <li><strong>Rango de precios:</strong> {{ r.rango_precios }}</li>
-                    <li><strong>Dirección:</strong> {{ r.direccion }}</li>
-                    <li><strong>Consumo en sitio:</strong> {{ "Sí" if r.consumo_en_sitio else "No" }}</li>
-                    <li><strong>Domicilio:</strong> {{ "Sí" if r.delivery else "No" }}</li>
-                  </ul>
-                  <button class="btn btn-primary" type="submit" name="restaurant" value="{{r.id_restaurante}}">¡Quiero aquí!</button>
-                </div>
-
-                <div class="card-footer bg-white border-0">
-                  <div class="d-flex flex-wrap gap-2">
-                    {% for tipo in r.tipos_comida %}
-                    <span class="badge bg-secondary">{{ tipo.descripcion }}</span>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
+          <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
-            {% endfor %}
           </div>
-          {% else %}
-          <p class="text-center mt-4">No hay restaurantes disponibles para este municipio.</p>
           {% endif %}
         </form>
 
