@@ -27,6 +27,11 @@ def admin_login():
 
 @main.route('/sign')
 def sign():
+    user_id = session.get('user_id')
+
+    if user_id:
+        return render_template('accion.html')
+
     return render_template('sign.html')
 
 
@@ -73,7 +78,6 @@ def signin():
 
         user = Usuario.query.filter_by(celular=username, password=password).first()
         if user:
-            session['admin_logged_in'] = True
             session['user_id'] = str(user.id)
             return redirect('/accion')
         else:
@@ -97,7 +101,7 @@ def order_status():
         order_details = (
     Orden.query
     .filter(Orden.id_usuario == user_id)
-    .order_by(Orden.estado.asc(), Orden.creation_date.asc())
+    .order_by(Orden.estado.asc(), Orden.creation_date.desc())
     .all()
 )
 
@@ -182,6 +186,12 @@ def dishes():
 def order():
     error= None
     dishes = request.args.getlist('dishes')
+
+    if not dishes:
+        error = "Por favor selecciona un plato para realizar tu pedido."
+        return render_template('order.html', error=error)
+
+
     user_id = session.get('user_id')
     print(user_id)
     platos = []
@@ -215,3 +225,8 @@ def admin_logout():
     session.pop('admin_logged_in', None)
     session.clear()
     return redirect(url_for('main.admin_login'))
+
+@main.route('/logout')
+def logout():
+    session.clear()
+    return render_template('index.html')
