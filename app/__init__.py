@@ -14,7 +14,7 @@ import os
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
+def create_app(*args, **kwargs):
     app = Flask(__name__)
     app.secret_key = os.getenv('SECRET_KEY','Rr_123456')
     app.config.from_object(Config)

@@ -1,5 +1,5 @@
 flask
-gunicorn
+gunicorn>=20.1.0
 flask_sqlalchemy
 flask_admin
 psycopg2-binary
