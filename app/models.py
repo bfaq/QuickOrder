@@ -25,6 +25,7 @@ class Orden(db.Model):
     descripcion = db.Column(db.Text, nullable=False)
     estado = db.Column(db.Integer, nullable=False)
     id_usuario = db.Column(UUID(as_uuid=True), db.ForeignKey('usuarios.id'), nullable=False)
+    creation_date = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 
 class OrdenDetalles(db.Model):
     __tablename__ = "ordenDetalles"
