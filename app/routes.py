@@ -27,6 +27,11 @@ def admin_login():
 
 @main.route('/sign')
 def sign():
+    user_id = session.get('user_id')
+
+    if user_id:
+        return render_template('accion.html')
+
     return render_template('sign.html')
 
 
@@ -73,16 +78,41 @@ def signin():
 
         user = Usuario.query.filter_by(celular=username, password=password).first()
         if user:
-            session['admin_logged_in'] = True
             session['user_id'] = str(user.id)
-            return redirect('/location')
+            return redirect('/accion')
         else:
             error = 'Usuario o contraseña incorrectos'
             
     return render_template('signin.html', error=error)
 
 
+@main.route('/accion')
+def accion():
+   return render_template('accion.html')
 
+
+# path accion = Constulta el estado de tu pedido
+@main.route('/order_status', methods=['GET', 'POST'])
+def order_status():
+    error= None
+    user_id = session.get('user_id')
+    order_details = []
+    try:
+        order_details = (
+    Orden.query
+    .filter(Orden.id_usuario == user_id)
+    .order_by(Orden.estado.asc(), Orden.creation_date.desc())
+    .all()
+)
+
+        print("order_details: ", order_details)
+    except Exception as e:
+            error = "Error al obtener información de orden: " + str(e)
+    return render_template('order_status.html', error=error, order_details=order_details)    
+
+
+
+# path accion = Realiza tu pedido
 @main.route('/location')
 def location():
     error = None
@@ -152,10 +182,15 @@ def dishes():
     return render_template('dishes.html', error=error, platos=platos)
 
 
-@main.route('/order')
+@main.route('/order', methods=["GET","POST"])
 def order():
     error= None
     dishes = request.args.getlist('dishes')
+
+    if not dishes:
+        error = "Por favor selecciona un plato para realizar tu pedido."
+        return render_template('order.html', error=error)
+
     user_id = session.get('user_id')
     platos = []
     try:
@@ -179,7 +214,7 @@ def order():
     except Exception as e:
         error = "Error al obtener restaurantes: " + str(e)
         print(error)
-    return render_template('order.html', error=error, platos=platos)
+    return render_template('order.html', error=error, orden=orden)
 
 
 
@@ -188,3 +223,8 @@ def admin_logout():
     session.pop('admin_logged_in', None)
     session.clear()
     return redirect(url_for('main.admin_login'))
+
+@main.route('/logout')
+def logout():
+    session.clear()
+    return render_template('index.html')

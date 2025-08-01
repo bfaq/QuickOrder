@@ -18,7 +18,7 @@
         <div class="text-center">
             <div class="row">
                 <div class="col">
-                    <h3 class="mainFontColor">Elije tus platos</h3>
+                    <h3 class="mainFontColor">Elige tus platos</h3>
                 </div>
             </div>
             <br />
@@ -29,34 +29,45 @@
                 <div class="alert alert-danger">{{ error }}</div>
                 {% endif %}
                 <form method="GET" action="order">
-                    {% if platos %}
-                    <div class="row row-cols-1 row-cols-md-3 g-4">
-                        {% for p in platos %}
+                    <div class="row">
                         <div class="col">
-                            <div class="card dish-card h-100 shadow-sm">
-                                <img src="{{ url_for('static', filename='uploads/' ~ p.imagen) }}" class="card-img-top"
-                                    alt="{{ p.nombre }}">
-                                <div class="card-body d-flex flex-column justify-content-between">
-                                    <div>
-                                        <h5 class="card-title text-dark">{{ p.nombre }}</h5>
-                                        <p class="card-text text-muted">{{ p.descripcion }}</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <span class="price-tag">${{ p.precio }}</span>
-                                         <input type="checkbox" class="btn-check" id="btn-check-outlined-{{p.id_producto}}"
-                                            value="{{p.id_producto}}"  name="dishes" autocomplete="off">
-                                        <label class="btn btn-outline-primary"
-                                            for="btn-check-outlined-{{p.id_producto}}">Agregar</label><br>
+                            {% if platos %}
+                            <div class="row row-cols-1 row-cols-md-3 g-4">
+                                {% for p in platos %}
+                                <div class="col">
+                                    <div class="card dish-card h-100 shadow-sm">
+                                        <img src="{{ url_for('static', filename='uploads/' ~ p.imagen) }}"
+                                            class="card-img-top" alt="{{ p.nombre }}">
+                                        <div class="card-body d-flex flex-column justify-content-between">
+                                            <div>
+                                                <h5 class="card-title text-dark">{{ p.nombre }}</h5>
+                                                <p class="card-text text-muted">{{ p.descripcion }}</p>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <span class="price-tag">${{ p.precio }}</span>
+                                                <input type="checkbox" class="btn-check"
+                                                    id="btn-check-outlined-{{p.id_producto}}" value="{{p.id_producto}}"
+                                                    name="dishes" autocomplete="off">
+                                                <label class="btn btn-outline-primary"
+                                                    for="btn-check-outlined-{{p.id_producto}}">Agregar</label><br>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                {% endfor %}
                             </div>
+
+                            {% else %}
+                            <p class="text-center mt-5">No hay platos disponibles para este restaurante.</p>
+                            {% endif %}
                         </div>
-                        {% endfor %}
-                        <button class="btn btn-outline-primary btn-sm">Pedir</button>
+
                     </div>
-                    {% else %}
-                    <p class="text-center mt-5">No hay platos disponibles para este restaurante.</p>
-                    {% endif %}
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <button class="btn btn-outline-primary btn-sm w-100">Pedir</button>
+                        </div>
+                    </div>
                 </form>
 
 
